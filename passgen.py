@@ -1,10 +1,12 @@
-# Track passwords with
+#!/usr/bin/env python3
 
-# Step 1: Generate a random password with the given function
-# Step 2: Store the password within a file that we will encrypt
-# Step 3: The file should be in JSON format so that we can read
-#           it as a dictionary.
 
+# Author: Andrew Masters
+
+# Description: Easily create and retrieve passwords using this password generator
+
+
+import argparse
 import sys
 import string
 import secrets
@@ -62,18 +64,8 @@ def fetch_password_for_name(name):
     if not encryption_file.exists():
         return ''
     pw_dict = decrypt_file()
-    pw = pw_dict[name]
+    pw = pw_dict.get(name, '')
     return pw
-
-# Checks if the file exists and adds the given nick name and pw if not
-def check_if_pw_file_exists(nick_name, password):
-    enc_passwords = Path('enc_passwords.txt')
-    if not enc_passwords.exists():
-        pw_dict = {nick_name : password}
-        with open(enc_passwords, 'w') as file:
-            file.write(json.dumps(pw_dict))
-    else:
-        f = Fernet(key)
 
 # Requests a name for the password that matches to it
 def add_password_with_name(name):
@@ -103,5 +95,70 @@ def passgen(name):
     print('Password copied to clipboard.')
     pyperclip.copy(pw)
 
-name = input("name of password: ")
-passgen(name)
+# Remove a password from the encrypted file and
+def passgen_remove_name(name):
+    enc_passwords = Path('enc_passwords.txt')
+    if enc_passwords.exists():
+        pw_dict = decrypt_file()
+    else:
+        print("There are no passwords to delete.")
+        return
+    if pw_dict.get(name, '') == '':
+        print(f'Password for {name} could not be deleted because it does not exist.')
+        return
+
+    del pw_dict[name]
+    new_file = Path('temp_pws.txt')
+    with open(new_file, 'w') as raw_file:
+        raw_file.write(json.dumps(pw_dict))
+    encrypt_file(new_file)
+    print(f'Password for {name} has been deleted.')
+
+# Fetch all names from the encrypted file
+def fetch_names():
+    encryption_file = Path('enc_passwords.txt')
+    if not encryption_file.exists():
+        print('Could not retrieve encrypted password file.')
+        return
+    pw_dict = decrypt_file()
+    keys = pw_dict.keys()
+    for key in keys:
+        print(key)
+
+def fetch_names_with_passwords():
+    encryption_file = Path('enc_passwords.txt')
+    if not encryption_file.exists():
+        print('Could not retrieve encrypted password file.')
+        return
+    pw_dict = decrypt_file()
+    keys = pw_dict.keys()
+    for key, value in pw_dict.items():
+        print(key, ' -> ', value)
+
+def main():
+    parser=argparse.ArgumentParser(description='Parse out the name.')
+    parser.add_argument("-add_password", help="name associated with password", type=str)
+    parser.add_argument("-show_names", nargs='?', const=True, help="view all names", type=bool)
+    parser.add_argument("-show_passwords", nargs='?', const=True, help="show all passwords with their associated name", type=bool)
+    parser.add_argument("-remove_password", help="remove the password of the given name", type=str)
+
+    args = parser.parse_args()
+
+    # Ensure that the name variable is not null
+    if args.add_password is not None:
+        passgen(args.name)
+
+    if args.remove_password is not None:
+        passgen_remove_name(args.remove_password)
+
+    # Fetch all the password names if requested
+    if args.show_names:
+        fetch_names()
+
+    # Fetch all names with their passwords
+    if args.show_passwords:
+        fetch_names_with_passwords()
+
+
+if __name__=="__main__":
+    main()

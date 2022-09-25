@@ -24,7 +24,6 @@ Now, we can quickly generate, access, and use our passwords.
 
 ## If you wish to run this project across your machine in terminal, follow the link below
 
-Make sure to use the `passgen` UNIX file rather than the python file
 
 <a href="https://dbader.org/blog/how-to-make-command-line-commands-with-python" target="_blank">How to make command line commands with Python</a>
 

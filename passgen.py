@@ -137,7 +137,7 @@ def fetch_names_with_passwords():
 
 def main():
     parser=argparse.ArgumentParser(description='Parse out the name.')
-    parser.add_argument("-add_password", help="name associated with password", type=str)
+    parser.add_argument("-fetch", help="fetch the password associated with the name", type=str)
     parser.add_argument("-show_names", nargs='?', const=True, help="view all names", type=bool)
     parser.add_argument("-show_passwords", nargs='?', const=True, help="show all passwords with their associated name", type=bool)
     parser.add_argument("-remove_password", help="remove the password of the given name", type=str)
@@ -145,8 +145,8 @@ def main():
     args = parser.parse_args()
 
     # Ensure that the name variable is not null
-    if args.add_password is not None:
-        passgen(args.name)
+    if args.fetch is not None:
+        passgen(args.fetch)
 
     if args.remove_password is not None:
         passgen_remove_name(args.remove_password)

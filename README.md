@@ -15,7 +15,7 @@ The design of this manager is simple:
 This is the base design of this manager, however, I also wanted to make it instant in adding passwords so if the name you use is not found, I quickly generate a new password.
 I also wanted to make it easy to use the password that you just created or fetched, so I paste the password to your clipboard for instant use.
 
-Now, we can quickly generate, access, and use our passwords. 
+Now, we can quickly generate, access, and use our passwords.
 
 
 
@@ -24,6 +24,7 @@ Now, we can quickly generate, access, and use our passwords.
 
 ## If you wish to run this project across your machine in terminal, follow the link below
 
+Make sure to use the `passgen` UNIX file rather than the python file
 <a href="https://dbader.org/blog/how-to-make-command-line-commands-with-python" target="_blank">How to make command line commands with Python</a>
 
 Also, on the last step from the link above, ensure that you input the path into the file that is run at the start of your terminal. Or do `source [file you wish to run]` which should run that file at the beginning of a terminal session.
